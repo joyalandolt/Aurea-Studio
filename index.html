@@ -558,7 +558,33 @@
   .legal a{color:var(--gold-light);border-bottom:1px solid rgba(234,217,172,0.4);}
   .legal .placeholder{color:var(--gold);background:rgba(201,167,104,0.12);padding:1px 6px;border-radius:3px;}
   .legal-note{margin-top:50px;padding:20px 24px;border:1px solid var(--line-strong);border-radius:4px;font-size:13px;color:var(--muted);}
-  .legal-divider{border:none;border-top:1px solid var(--line);margin:100px 0 0;}
+  .legal-modal-overlay{
+    position:fixed;inset:0;z-index:600;
+    background:rgba(10,9,8,0.8);backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;
+    opacity:0;pointer-events:none;
+    transition:opacity .35s ease;
+  }
+  .legal-modal-overlay.open{opacity:1;pointer-events:auto;}
+  .legal-modal-card{
+    background:var(--bg-elev-2);border:1px solid var(--line-strong);border-radius:4px;
+    max-width:760px;width:100%;max-height:82vh;overflow-y:auto;
+    padding:60px 48px 50px;position:relative;
+    transform:translateY(16px) scale(0.98);transition:transform .35s ease;
+  }
+  .legal-modal-overlay.open .legal-modal-card{transform:translateY(0) scale(1);}
+  .legal-modal-close{
+    position:sticky;float:right;top:0;margin-left:16px;margin-bottom:16px;
+    width:36px;height:36px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:var(--muted);
+    border:1px solid var(--line-strong);font-size:14px;transition:all .3s ease;
+    background:var(--bg-elev-2);z-index:2;
+  }
+  .legal-modal-close:hover{color:var(--gold-light);border-color:var(--gold);}
+  @media (max-width:560px){
+    .legal-modal-card{padding:50px 24px 36px;max-height:88vh;}
+  }
 
   .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease, transform .9s ease;}
   .reveal.in{opacity:1;transform:translateY(0);}
@@ -659,8 +685,8 @@
 
 <div class="marquee">
   <div class="marquee-track">
-    <span>Minimalistisch <i class="sep">·</i> Kreativ <i class="sep">·</i> Handgefertigt <i class="sep">·</i> Persönlich <i class="sep">·</i> Zürich <i class="sep">·</i> Studio <i class="sep">·</i></span>
-    <span>Minimalistisch <i class="sep">·</i> Kreativ <i class="sep">·</i> Handgefertigt <i class="sep">·</i> Persönlich <i class="sep">·</i> Zürich <i class="sep">·</i> Studio <i class="sep">·</i></span>
+    <span>Minimalistisch <i class="sep">·</i> Kreativ <i class="sep">·</i> Handgefertigt <i class="sep">·</i> Persönlich <i class="sep">·</i> Muri AG <i class="sep">·</i> Studio <i class="sep">·</i></span>
+    <span>Minimalistisch <i class="sep">·</i> Kreativ <i class="sep">·</i> Handgefertigt <i class="sep">·</i> Persönlich <i class="sep">·</i> Muri AG <i class="sep">·</i> Studio <i class="sep">·</i></span>
   </div>
 </div>
 
@@ -813,7 +839,6 @@
           <div class="case-visual">
             <div class="preview-frame"><iframe src="https://www.zenkochen.ch" loading="lazy" title="Vorschau ZEN Kochen" sandbox="allow-scripts allow-same-origin"></iframe></div>
             <div class="preview-scrim"></div>
-            <span class="top-tag">ZEN Kochen · Ernährungsberatung, Schweiz</span>
             <span class="case-index serif">01</span>
           </div>
           <div class="case-body">
@@ -833,7 +858,6 @@
           <div class="case-visual">
             <div class="preview-frame"><iframe src="https://www.seelenstrom-reiki.ch" loading="lazy" title="Vorschau Seelenstrom" sandbox="allow-scripts allow-same-origin"></iframe></div>
             <div class="preview-scrim"></div>
-            <span class="top-tag">Seelenstrom · Reiki für Mensch &amp; Tier, Schweiz</span>
             <span class="case-index serif">02</span>
           </div>
           <div class="case-body">
@@ -929,7 +953,7 @@
       <div class="form-row form-consent">
         <label class="consent-label">
           <input type="checkbox" name="consent" id="cf-consent" required>
-          <span>Ich habe die <a href="#agb" target="_blank" rel="noopener">AGB</a> und die <a href="#datenschutz" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und akzeptiere sie.</span>
+          <span>Ich habe die <a href="#agb" data-legal-trigger="agbModal">AGB</a> und die <a href="#datenschutz" data-legal-trigger="datenschutzModal">Datenschutzerklärung</a> gelesen und akzeptiere sie.</span>
         </label>
       </div>
 
@@ -939,7 +963,7 @@
     <div class="kontakt-row">
       <a href="mailto:studio.of.aurea@gmail.com" class="kontakt-email serif magnetic">studio.of.aurea@gmail.com</a>
       <div class="kontakt-meta">
-        <div>Studio · Zürich · Schweiz</div>
+        <div>Studio · Muri AG · Schweiz</div>
       </div>
     </div>
   </div>
@@ -971,45 +995,42 @@
       <div class="footer-col">
         <h5>Kontakt</h5>
         <a href="mailto:studio.of.aurea@gmail.com">studio.of.aurea@gmail.com</a>
-        <a href="#">Instagram</a>
-        <a href="#">LinkedIn</a>
+        <a href="https://www.linkedin.com/in/joy-landolt-a44313338/" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2026 Auréa Studio — Joy Landolt</span>
       <span style="display:flex;gap:18px;">
-        <a href="#impressum" style="color:var(--muted);">Impressum</a>
-        <a href="#datenschutz" style="color:var(--muted);">Datenschutz</a>
-        <a href="#agb" style="color:var(--muted);">AGB</a>
+        <a href="#impressum" style="color:var(--muted);" data-legal-trigger="impressumModal">Impressum</a>
+        <a href="#datenschutz" style="color:var(--muted);" data-legal-trigger="datenschutzModal">Datenschutz</a>
+        <a href="#agb" style="color:var(--muted);" data-legal-trigger="agbModal">AGB</a>
       </span>
     </div>
   </div>
 </footer>
 
-<section class="legal" id="impressum">
-  <div class="wrap">
-    <a href="#top" class="legal-back">↑ Zurück nach oben</a>
+<div class="legal-modal-overlay" id="impressumModal">
+  <div class="legal-modal-card legal">
+    <button class="legal-modal-close" data-legal-close>✕</button>
     <h2 class="legal-title serif">Impressum</h2>
 
     <h3>Anbieterin</h3>
     <p>
-      <span class="placeholder">Joy Landolt</span><br>
+      Joy Landolt<br>
       Auréa Studio<br>
-      <span class="placeholder">[Strasse und Hausnummer]</span><br>
-      <span class="placeholder">[PLZ und Ort]</span><br>
+      Mürlefeld 3a<br>
+      5630 Muri AG<br>
       Schweiz
     </p>
 
     <h3>Kontakt</h3>
     <p>
-      E-Mail: <a href="mailto:studio.of.aurea@gmail.com">studio.of.aurea@gmail.com</a><br>
-      Telefon: <span class="placeholder">[optional, falls gewünscht]</span>
+      E-Mail: <a href="mailto:studio.of.aurea@gmail.com">studio.of.aurea@gmail.com</a>
     </p>
 
     <h3>Rechtsform</h3>
     <p>
-      Einzelunternehmen (Auréa Studio ist eine Marken-/Geschäftsbezeichnung, keine eigene juristische Person).
-      <span class="placeholder">UID-Nummer: [falls im Handelsregister eingetragen bzw. MWST-pflichtig]</span>
+      Einzelunternehmen (Auréa Studio ist eine Marken-/Geschäftsbezeichnung, keine eigene juristische Person). Nicht im Handelsregister eingetragen, nicht MWST-pflichtig.
     </p>
 
     <h3>Haftungsausschluss</h3>
@@ -1022,25 +1043,23 @@
     <p>Die auf dieser Website veröffentlichten Inhalte, das Design und der Quellcode unterliegen dem Urheberrecht. Jede Vervielfältigung, Bearbeitung, Verbreitung oder sonstige Verwertung ausserhalb der Grenzen des Urheberrechts bedarf der vorherigen schriftlichen Zustimmung von Auréa Studio.</p>
 
     <div class="legal-note">
-      <strong>Hinweis:</strong> Dieses Impressum ist eine Vorlage und muss von dir noch mit deinen echten Angaben (Adresse, ggf. UID/MWST-Nummer, Telefonnummer) ergänzt werden.
+      <strong>Hinweis:</strong> Diese Angaben basieren auf deinen Informationen (Einzelunternehmen, nicht MWST-pflichtig). Solltest du später im Handelsregister eingetragen oder MWST-pflichtig werden, ergänze bitte die entsprechende UID-Nummer.
     </div>
   </div>
-</section>
+</div>
 
-<hr class="legal-divider">
-
-<section class="legal" id="datenschutz">
-  <div class="wrap">
-    <a href="#top" class="legal-back">↑ Zurück nach oben</a>
+<div class="legal-modal-overlay" id="datenschutzModal">
+  <div class="legal-modal-card legal">
+    <button class="legal-modal-close" data-legal-close>✕</button>
     <h2 class="legal-title serif">Datenschutzerklärung</h2>
-    <p class="legal-updated">Stand: <span class="placeholder">[Datum einfügen]</span></p>
+    <p class="legal-updated">Stand: 15. Juli 2026</p>
 
     <p>Der Schutz deiner Daten ist mir wichtig. Diese Erklärung informiert dich, welche Daten beim Besuch dieser Website erhoben werden, wofür sie verwendet werden und welche Rechte dir zustehen — gemäss dem Schweizer Datenschutzgesetz (DSG) sowie, soweit anwendbar, der EU-Datenschutz-Grundverordnung (DSGVO).</p>
 
     <h3>Verantwortliche Stelle</h3>
     <p>
       Joy Landolt, Auréa Studio<br>
-      <span class="placeholder">[Adresse]</span>, Schweiz<br>
+      Mürlefeld 3a, 5630 Muri AG, Schweiz<br>
       E-Mail: <a href="mailto:studio.of.aurea@gmail.com">studio.of.aurea@gmail.com</a>
     </p>
 
@@ -1093,15 +1112,13 @@
       <strong>Hinweis:</strong> Diese Datenschutzerklärung deckt die aktuell eingesetzten Dienste (Formspree, Google Fonts) ab. Sobald weitere Dienste hinzukommen, muss sie entsprechend ergänzt werden.
     </div>
   </div>
-</section>
+</div>
 
-<hr class="legal-divider">
-
-<section class="legal" id="agb">
-  <div class="wrap">
-    <a href="#top" class="legal-back">↑ Zurück nach oben</a>
+<div class="legal-modal-overlay" id="agbModal">
+  <div class="legal-modal-card legal">
+    <button class="legal-modal-close" data-legal-close>✕</button>
     <h2 class="legal-title serif">Allgemeine Geschäftsbedingungen</h2>
-    <p class="legal-updated">Gültig für Aufträge von Auréa Studio, Joy Landolt · Stand: <span class="placeholder">[Datum einfügen]</span></p>
+    <p class="legal-updated">Gültig für Aufträge von Auréa Studio, Joy Landolt · Stand: 15. Juli 2026</p>
 
     <h3>1. Geltungsbereich</h3>
     <p>Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge zwischen Auréa Studio (nachfolgend "Auftragnehmerin") und ihren Kund:innen (nachfolgend "Auftraggeberin") über die Gestaltung, Entwicklung und Betreuung von Websites und verwandten digitalen Leistungen. Abweichende Bedingungen der Auftraggeberin gelten nur, wenn sie schriftlich anerkannt wurden.</p>
@@ -1114,9 +1131,9 @@
 
     <h3>4. Preise und Zahlungsbedingungen</h3>
     <ul>
-      <li>Alle Preise verstehen sich in Schweizer Franken (CHF), <span class="placeholder">[zzgl./inkl. MWST, je nach MWST-Pflicht]</span>.</li>
-      <li>Sofern nicht anders vereinbart, wird eine Anzahlung von <span class="placeholder">[z. B. 50%]</span> bei Auftragsbestätigung fällig, der Restbetrag bei Fertigstellung bzw. vor Aufschaltung der Website.</li>
-      <li>Zahlungsfrist: <span class="placeholder">[z. B. 14 Tage]</span> ab Rechnungsdatum.</li>
+      <li>Alle Preise verstehen sich in Schweizer Franken (CHF), exkl. MWST (Auréa Studio ist nicht MWST-pflichtig).</li>
+      <li>Sofern nicht anders vereinbart, wird eine Anzahlung von 50% bei Auftragsbestätigung fällig, der Restbetrag bei Fertigstellung bzw. vor Aufschaltung der Website.</li>
+      <li>Zahlungsfrist: 14 Tage ab Rechnungsdatum.</li>
       <li>Bei Zahlungsverzug behält sich die Auftragnehmerin vor, die Arbeiten zu sistieren und/oder Verzugszinsen zu verlangen.</li>
     </ul>
 
@@ -1124,7 +1141,7 @@
     <p>Die Auftraggeberin stellt die für das Projekt notwendigen Inhalte (Texte, Bilder, Logos, Zugangsdaten etc.) rechtzeitig und in vereinbarter Qualität zur Verfügung. Verzögerungen, die durch verspätete Zulieferung oder Feedback der Auftraggeberin entstehen, verschieben die vereinbarten Termine entsprechend, ohne dass daraus Ansprüche gegen die Auftragnehmerin entstehen.</p>
 
     <h3>6. Revisionen</h3>
-    <p>Die Anzahl der im jeweiligen Paket inkludierten Revisionsrunden ist im Angebot festgehalten. Weitere Änderungswünsche ausserhalb des vereinbarten Umfangs werden nach Aufwand zu einem Stundensatz von <span class="placeholder">[CHF ___/Std.]</span> verrechnet.</p>
+    <p>Die Anzahl der im jeweiligen Paket inkludierten Revisionsrunden ist im Angebot festgehalten. Weitere Änderungswünsche ausserhalb des vereinbarten Umfangs werden nach Aufwand zu einem Stundensatz von CHF 90.–/Std. verrechnet.</p>
 
     <h3>7. Liefertermine</h3>
     <p>Termine sind grundsätzlich Richtwerte und abhängig von der rechtzeitigen Mitwirkung der Auftraggeberin (siehe Ziff. 5). Feste, verbindliche Termine bedürfen einer ausdrücklichen schriftlichen Vereinbarung.</p>
@@ -1145,16 +1162,16 @@
     <p>Beide Parteien können ein Projekt aus wichtigem Grund vorzeitig beenden. Bereits erbrachte Leistungen sowie angefallene Aufwände werden in diesem Fall anteilig in Rechnung gestellt.</p>
 
     <h3>13. Anwendbares Recht und Gerichtsstand</h3>
-    <p>Es gilt materielles schweizerisches Recht unter Ausschluss des UN-Kaufrechts (CISG). Gerichtsstand ist, soweit gesetzlich zulässig, <span class="placeholder">[Sitz/Wohnsitz der Auftragnehmerin, z. B. Zürich]</span>, Schweiz. Für Konsument:innen mit Wohnsitz in der EU können zwingende Bestimmungen des jeweiligen nationalen Verbraucherschutzrechts vorbehalten bleiben.</p>
+    <p>Es gilt materielles schweizerisches Recht unter Ausschluss des UN-Kaufrechts (CISG). Gerichtsstand ist, soweit gesetzlich zulässig, Muri AG, Kanton Aargau, Schweiz. Für Konsument:innen mit Wohnsitz in der EU können zwingende Bestimmungen des jeweiligen nationalen Verbraucherschutzrechts vorbehalten bleiben.</p>
 
     <h3>14. Schlussbestimmungen</h3>
     <p>Sollten einzelne Bestimmungen dieser AGB unwirksam sein, bleibt die Gültigkeit der übrigen Bestimmungen unberührt. Änderungen dieser AGB werden auf dieser Seite veröffentlicht.</p>
 
     <div class="legal-note">
-      <strong>Hinweis:</strong> Dies ist eine Vorlage auf Basis gängiger Praxis für Schweizer Freelancer im Webdesign. Die mit <span class="placeholder">Platzhaltern</span> markierten Stellen musst du an deine tatsächliche Situation anpassen. Bei internationalen Kund:innen empfiehlt sich eine kurze Prüfung durch eine Fachperson.
+      <strong>Hinweis:</strong> Die konkreten Werte (Anzahlung 50%, Zahlungsfrist 14 Tage, Stundensatz CHF 90.–, Gerichtsstand Muri AG) sind sinnvolle Startwerte — prüfe, ob sie zu deiner Praxis passen, und passe sie bei Bedarf an. Bei internationalen Kund:innen empfiehlt sich zusätzlich eine kurze Prüfung durch eine Fachperson, insbesondere wegen zwingendem Verbraucherschutzrecht bei EU-Kund:innen.
     </div>
   </div>
-</section>
+</div>
 
 <script>
   const header = document.getElementById('siteHeader');
@@ -1512,6 +1529,37 @@
         submitBtn.innerHTML = originalText;
       }
     });
+  })();
+  // legal document modals (Impressum / Datenschutz / AGB) — hidden until triggered
+  (function legalModals(){
+    const overlays = document.querySelectorAll('.legal-modal-overlay');
+    if (!overlays.length) return;
+
+    function closeAll(){
+      overlays.forEach(o => o.classList.remove('open'));
+      document.body.style.overflow = '';
+    }
+    function open(id){
+      const target = document.getElementById(id);
+      if (!target) return;
+      closeAll();
+      target.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    document.querySelectorAll('[data-legal-trigger]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        open(link.getAttribute('data-legal-trigger'));
+      });
+    });
+    document.querySelectorAll('[data-legal-close]').forEach(btn => {
+      btn.addEventListener('click', closeAll);
+    });
+    overlays.forEach(o => {
+      o.addEventListener('click', (e) => { if (e.target === o) closeAll(); });
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
   })();
 </script>
 
