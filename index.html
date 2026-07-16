@@ -1205,15 +1205,28 @@
     const text = el.textContent;
     el.textContent = '';
     el.style.opacity = '1';
-    [...text].forEach((ch, i) => {
-      const span = document.createElement('span');
-      span.textContent = ch === ' ' ? '\u00A0' : ch;
-      span.style.display = 'inline-block';
-      span.style.opacity = '0';
-      span.style.transform = 'translateY(0.4em)';
-      span.style.animation = `letterIn .7s cubic-bezier(.2,.8,.2,1) forwards ${0.25 + i * 0.035}s`;
-      if (ch === 'é') span.classList.add('spark-letter');
-      el.appendChild(span);
+    const words = text.split(' ');
+    let i = 0;
+    words.forEach((word, wIdx) => {
+      const wordSpan = document.createElement('span');
+      wordSpan.style.display = 'inline-block';
+      wordSpan.style.whiteSpace = 'nowrap';
+      [...word].forEach((ch) => {
+        const span = document.createElement('span');
+        span.textContent = ch;
+        span.style.display = 'inline-block';
+        span.style.opacity = '0';
+        span.style.transform = 'translateY(0.4em)';
+        span.style.animation = `letterIn .7s cubic-bezier(.2,.8,.2,1) forwards ${0.25 + i * 0.035}s`;
+        if (ch === 'é') span.classList.add('spark-letter');
+        wordSpan.appendChild(span);
+        i++;
+      });
+      el.appendChild(wordSpan);
+      if (wIdx < words.length - 1) {
+        el.appendChild(document.createTextNode(' '));
+        i++;
+      }
     });
   })();
 
